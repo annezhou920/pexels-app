@@ -1,0 +1,45 @@
+.photoContainer {
+  display: block;
+  width: 100%;
+  position: relative;
+
+  &:hover {
+    .photoLink {
+      opacity: 0.3;
+    }
+
+    .photoOverlay {
+      opacity: 1;
+    }
+  }
+
+  &:last-child {
+    grid-column: 2;
+  }
+}
+
+.photo {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.photoLink {
+  opacity: 1;
+  transition: 0.5s ease;
+}
+
+.photoOverlay {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+}
+
+.photographerLink {
+  color: #282c34;
+  margin: 10px;
+  display: block;
+  width: 100%;
+}
