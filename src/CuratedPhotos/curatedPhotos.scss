@@ -1,0 +1,57 @@
+.curatedPhotos {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.photosContainer {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-bottom: 50px;
+  width: 100%;
+  max-width: 960px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.paginationButton {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+
+  &:first-child {
+    margin-right: 5px;
+  }
+}
+
+.searchBar {
+  width: 500px;
+  max-width: 100%;
+  padding: 5px;
+  height: 30px;
+  outline: #282c34;
+  margin: 30px auto;
+}
+
+.submitButton {
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .photosContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
