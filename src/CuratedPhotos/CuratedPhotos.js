@@ -92,6 +92,8 @@ function CuratedPhotos() {
       return <span>Error: {queryErr.message}</span>;
     }
 
+    if (!queryRes?.photos?.length) return <p>Oops. We found no results.</p>;
+
     return (
       <div className="photosContainer">
         {queryRes &&
