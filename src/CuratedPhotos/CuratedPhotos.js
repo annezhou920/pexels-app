@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import debounce from "lodash/debounce";
 import { useSearchParams } from "react-router-dom";
 
@@ -10,8 +10,7 @@ function CuratedPhotos() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const pageQueryParam = searchParams.get("page");
   const queryQueryParam = searchParams.get("query");
-
-  const [page, setPage] = useState(pageQueryParam || 1);
+  const [page, setPage] = useState(Number(pageQueryParam) || 1);
   const [query, setQuery] = useState(queryQueryParam || "");
 
   const { status, data, error, isPreviousData } = useCuratedPhotos({
@@ -27,17 +26,29 @@ function CuratedPhotos() {
     refetch,
   } = useSearchPhotos({ query, page });
 
+  useEffect(() => {
+    // ensure page and query params are getting updated when user navigates via browser history
+    if (pageQueryParam && queryQueryParam) {
+      setPage(Number(pageQueryParam));
+      setQuery(queryQueryParam);
+    } else if (pageQueryParam) {
+      setPage(Number(pageQueryParam));
+    } else {
+      setPage(1);
+    }
+  }, [pageQueryParam, queryQueryParam]);
+
   const queryStatus = query ? searchStatus : status;
   const queryErr = query ? searchError : error;
   const queryRes = query ? searchPhotoData : data;
   const prevData = query ? searchPreviousData : isPreviousData;
 
-  const handleChange = (e) => {
+  const handleChange = debounce((e) => {
     e.preventDefault();
     setSearchParams({ query: e.target.value, page: 1 });
     setQuery(e.target.value);
     setPage(1);
-  };
+  }, 500);
 
   const handleSearch = async () => {
     await refetch();
@@ -71,14 +82,6 @@ function CuratedPhotos() {
     }
     setPage(newPage);
   };
-
-  const debouncedChangeHandler = useMemo(() => debounce(handleChange, 500), []);
-
-  useEffect(() => {
-    return () => {
-      debouncedChangeHandler.cancel();
-    };
-  }, [debouncedChangeHandler]);
 
   const renderPhotos = () => {
     if (queryStatus === "loading") {
@@ -127,8 +130,9 @@ function CuratedPhotos() {
         placeholder="Search..."
         className="searchBar"
         type="search"
-        onChange={debouncedChangeHandler}
+        onChange={handleChange}
         onKeyDown={handleKeyPress}
+        defaultValue={query}
       />
     );
   };
